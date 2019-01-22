@@ -1,0 +1,24 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+#header {
+    background: #d53639;
+    height: 120px;
+}
+
+.heading {
+    font-size: 3em;
+    color: white;
+    position: fixed;
+    margin-top: 30px;
+    margin-left: 16%;
+}
+
+.rhodes-logo {
+    height: 90px;
+    padding-top: 15px;
+    padding-left: 1%;
+}
+
+main {
+    text-align: center;
+}
