@@ -72,13 +72,24 @@ function loadRooms() {
 loadRooms();
 
 
-function myfunction() {
+function book_function() {
   var rn = prompt("Which room would you like to book?");
   var tdir = prompt("How long is the reservation?");
   for (var i = 0; i < rooms.length; i++) {
     if(rn == rooms[i].number){
       rooms[i].open = "Closed";
       rooms[i].duration = tdir;
+    }
+    loadRooms();
+  }
+}
+
+function break_function() {
+  var rn = prompt("Which room would you like to add break time for?");
+  var tbr = prompt("How long is the break time?");
+  for (var i = 0; i < rooms.length; i++) {
+    if(rn == rooms[i].number){
+      rooms[i].breakTime = tbr;
     }
     loadRooms();
   }
