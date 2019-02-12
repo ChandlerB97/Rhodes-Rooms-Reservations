@@ -15,7 +15,7 @@ var Room = function(number, floor, capacity) {
 //"Create" function to create a reservation, set open = "Closed", set duration <= 5 hours (cap on room time)
 function createRes(length, roomNum) {
 for(var i = 0; i < rooms.length; i++) {
-  if(rooms[i].number === roomNum) {
+  if(rooms[i].number == roomNum) {
     rooms[i].duration = length;
     rooms[i].open = "Closed";
   }
@@ -24,7 +24,7 @@ for(var i = 0; i < rooms.length; i++) {
 //"Cancel" function to cancel a reservation, set open = "Open", reset duration = 0
 function cancelRes(roomNum) {
 for(var i = 0; i < rooms.length; i++) {
-  if(rooms[i].number === roomNum) {
+  if(rooms[i].number == roomNum) {
     rooms[i].duration = 0;
     rooms[i].open = "Open";
   }
@@ -73,8 +73,13 @@ loadRooms();
 
 
 function myfunction() {
+  var rn = prompt("Which room would you like to book?");
+  var tdir = prompt("How long is the reservation?");
   for (var i = 0; i < rooms.length; i++) {
-    rooms[i].open = "Closed";
+    if(rn == rooms[i].number){
+      rooms[i].open = "Closed";
+      rooms[i].duration = tdir;
+    }
     loadRooms();
   }
 }
