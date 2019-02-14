@@ -8,8 +8,9 @@ var Room = function(number, floor, capacity) {
   this.floor = floor;             //room floor
   this.capacity = capacity;       //room capacity
   this.open = "Open";             //room availability, set to true (open) for all rooms until booked
-  this.duration = 0;              //duration until room becomes available
+  this.duration_start = "-";      //duration until room becomes available
   this.breakTime = 0;             //duration until break time ends for student in booked room
+  this.duartion_end = "-";
 }
 
 //"Create" function to create a reservation, set open = "Closed", set duration <= 5 hours (cap on room time)
@@ -59,13 +60,9 @@ function loadRooms() {
   for(var i = 0; i < rooms.length; i++) {
     var info = document.getElementsByClassName('a_room');
     info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open + " &emsp;Time until available: " + rooms[i].duration 
-        + "mins " + " &emsp;Break time remaining: " +rooms[i].breakTime + "mins" + "&emsp;";
-    // var newb = document.createElement("button");
-    // newb.id = "button" + info[i].id;
-    // newb.innerHTML = "Book";
-    // info[i].append(newb);
-    // button();
+        + " &emsp;Availability: " + rooms[i].open + " &emsp;Reservation Starts: " + rooms[i].duration_start 
+        + " &emsp;Reservation Ends: " + rooms[i].duartion_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
+        + "mins" + "&emsp;";
   }
 }
 
@@ -74,11 +71,13 @@ loadRooms();
 
 function book_function() {
   var rn = prompt("Which room would you like to book?");
-  var tdir = prompt("How long is the reservation?");
+  var tdirs = prompt("Enter reservation start time:");
+  var tdire = prompt("Enter reservation end time:");
   for (var i = 0; i < rooms.length; i++) {
     if(rn == rooms[i].number){
       rooms[i].open = "Closed";
-      rooms[i].duration = tdir;
+      rooms[i].duration_start = tdirs;
+      rooms[i].duartion_end = tdire;
     }
     loadRooms();
   }
@@ -95,7 +94,18 @@ function break_function() {
   }
 }
 
-
+function cancel_function() {
+  var rn = prompt("Which room would you like to cancel reservation?");
+  for (var i = 0; i < rooms.length; i++) {
+    if(rn == rooms[i].number){
+      rooms[i].duration_start = "-";
+      rooms[i].duration_end = "-";
+      rooms[i].open = "Open";
+      rooms[i].breakTime = 0;
+    }
+    loadRooms();
+  }
+}
 
 // //For loop to loop through array of all Room classes to create and append new 'p' elements to the page
 // for (var i = 0; i < rooms.length; i++) {
