@@ -73,3 +73,21 @@ a {
     grid-column: 2;
     text-align: left;
 }
+
+
+#button {
+    background-color: #d53639;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button-container {
+    padding-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
