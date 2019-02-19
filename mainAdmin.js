@@ -43,11 +43,20 @@ let rooms = [room020, room120, room214, room216, room220, room222, room224, room
 //user for loop to print out each room class with all information
 function loadRooms() {
   for(var i = 0; i < rooms.length; i++) {
-    info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
-    info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open.bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
+    if(rooms[i].open == "Open") {
+      info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
+      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
+        + " &emsp;Availability: " + rooms[i].open.fontcolor("green").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
         + "mins" + "&emsp;";
+    }
+    else{
+      info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
+      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
+        + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
+        + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
+        + "mins" + "&emsp;";
+    }
   }
 }
 
