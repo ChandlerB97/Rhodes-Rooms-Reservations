@@ -1,157 +1,87 @@
-//Fill with classes for rooms
-//Rooms: 020, 120, 214, 216, 220, 222, 224, 226, 230, 301, 302, 306, 308, 310, 312, 314
-
-//Variable declarations
-var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn;
-
-//Room constructor function
-var Room = function(number, floor, capacity) {
-  //Fields of Room class
-  this.number = number;           //room number
-  this.floor = floor;             //room floor
-  this.capacity = capacity;       //room capacity
-  this.open = "Open";             //room availability, set to true (open) for all rooms until booked
-  this.duration_start = "-";      //duration until room becomes available
-  this.breakTime = 0;             //duration until break time ends for student in booked room
-  this.duration_end = "-";
-}
-
-
-//Declaring each new room
-var room020 = new Room("020", "Basement", 6);
-var room120 = new Room("120", "First", 4);
-var room214 = new Room("214", "Second", 6);
-var room216 = new Room("216", "Second", 5);
-var room220 = new Room("220", "Second", 6);
-var room222 = new Room("222", "Second", 4);
-var room224 = new Room("224", "Second", 8);
-var room226 = new Room("226", "Second", 4);
-var room230 = new Room("230", "Second", 4);
-var room301 = new Room("301", "Third", 4);
-var room302 = new Room("302", "Third", 6);
-var room306 = new Room("306", "Third", 5);
-var room308 = new Room("308", "Third", 4);
-var room310 = new Room("310", "Third", 4);
-var room312 = new Room("312", "Third", 3);
-var room314 = new Room("314", "Third", 4);
-
-//Array to store all classes of all rooms
-let rooms = [room020, room120, room214, room216, room220, room222, room224, room226, room230, 
-          room301, room302, room306, room308, room310, room312, room314];
-
-//Function to render all rooms to screen with appropriate information
-//user for loop to print out each room class with all information
-function loadRooms() {
-  for(var i = 0; i < rooms.length; i++) {
-    info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
-    info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open.bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
-        + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
-        + "mins" + "&emsp;";
-  }
-}
-
-//Call loadRooms() function to render content to page
-loadRooms();     
-
-
-//Book room function
-//Prompts user to specify room to book
-//Prompts user for start and end time of reservation
-//Loops through rooms to find room to book, updates room info accordingly
-function book_function() {
-  create_rn = prompt("Which room would you like to book?");
-  tdirs = prompt("Enter reservation start time:");
-  tdire = prompt("Enter reservation end time:");
-  for (var i = 0; i < rooms.length; i++) {
-    if(create_rn == rooms[i].number){
-      rooms[i].open = "Closed";
-      rooms[i].duration_start = tdirs;
-      rooms[i].duration_end = tdire;
-      break;
-    }
-  }
-  loadRooms();  //Call loadRooms again to render updated info to page
-}
-
-//Break time function
-//Prompts user to specify room to add break time for
-//Prompts user for length of break time
-//Loops through rooms to find room, updates room info accordingly
-function break_function() {
-  break_rn = prompt("Which room would you like to add break time for?");
-  tbr = prompt("How long is the break time?");
-  for (var i = 0; i < rooms.length; i++) {
-    if(break_rn == rooms[i].number){
-      rooms[i].breakTime = tbr;
-      break;
-    }
-  }
-  loadRooms();
-}
-
-//Cancel room reservation function
-//Prompts user to specify room to cancel
-//Loops through rooms to find room, updates room info accordingly
-function cancel_function() {
-  cancel_rn = prompt("Which room would you like to cancel reservation?");
-  for (var i = 0; i < rooms.length; i++) {
-    if(cancel_rn == rooms[i].number){
-      rooms[i].duration_start = "-";
-      rooms[i].duration_end = "-";
-      rooms[i].open = "Open";
-      rooms[i].breakTime = 0;
-      break;
-    }
-  }
-  loadRooms();
-}
-
-// //For loop to loop through array of all Room classes to create and append new 'p' elements to the page
-// for (var i = 0; i < rooms.length; i++) {
-//   var newp = document.createElement('p');     //declare variable to create a new paragraph element
-//   var newb = document.createElement("button");
-//   newb.innerHTML = "Book";
-//   //New variable that will add relevent info to newp to be printed out, grabbing info from each Room class
-//   newp.innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-//   + " &emsp;Availability: " + rooms[i].open + " &emsp;Time until available: " + rooms[i].duration 
-//   + "mins " + " &emsp;Break time remaining: " +rooms[i].breakTime + "mins";
-  
-//   var button = function() {
-//     newb.addEventListener ("click", function() {
-//       document.setI
-//       var rb = prompt("What room?");
-//       for (var i = 0; i < rooms.length; i++) {
-//         if(rooms[i].number === rb) {
-//           createRes(40, rooms[i]);
-//         }
-//       }
-//     });
-//   }
-
-//   if(rooms[i].floor === "Basement"){                          //check if current room is a basement room
-//   var ff = document.getElementById('basement-listings');  //create variable to get respective floor listing section
-//   ff.appendChild(newp);                                   //append newp info onto the section listing element to actually add to screen
-//   ff.appendChild(newb);
-//   button();
-//   }
-//   else if(rooms[i].floor === "First"){                        //check if current room is a first floor room
-//   var ff = document.getElementById('first-listings');     
-//   ff.appendChild(newp);
-//   ff.appendChild(newb);
-//   button();
-//   }
-//   else if(rooms[i].floor === "Second") {                      //check if current room is a second floor room      
-//   var ff = document.getElementById('second-listings');
-//   ff.appendChild(newp);
-//   ff.appendChild(newb);
-//   button();
-//   }
-//   else {                                                       //check if current room is a third floor room
-//   var ff = document.getElementById('third-listings');
-//   ff.appendChild(newp);
-//   ff.appendChild(newb);
-//   button();
-//   }
-  
-// };
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rhodes Rooms Reservations</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <!-- Begin Header info -->
+        <header id="header">
+            <img href="https://sites.rhodes.edu/barret" alt="rhodes-logo" src="https://www.rhodes.edu/sites/default/files/Rhodes%20Logo%202004%20CMYK_0.png" class="rhodes-logo">
+            <a class="heading">Barret Library Study Rooms</a>
+        </header>
+        <!-- End Header info -->
+        <main>
+            <div class="main-container" id="main-container">
+                <!-- Buttons info -->
+                <div class="button-container">
+                    <button id="button" onclick="book_function()">Create Reservation</button>
+                    <br><br>
+                    <button id="button" onclick="cancel_function()">Cancel Reservation</button>
+                    <br><br>
+                    <button id="button" onclick="break_function()">Set Break Time</button>
+                </div>
+                <!-- End Buttons info -->
+                <h2>Study Rooms Available</h2>
+                <!-- Floor sections for all floors to store rooms using js info -->
+                
+                <!-- First floor section info -->
+                <div class="basement-floor" id="basement-floor"><h3>Basement</h3>
+                    <section class="basement-listings" id="basement-listings">
+                        <p class="a_room" id="020">a</p>
+                    </section>
+                </div>
+                <!-- First floor section info -->
+                <div class="first-floor" id="first-floor"><h3>First Floor</h3>
+                    <section class="first-listings" id="first-listings">
+                        <p class="a_room" id="120">a</p>
+                    </section>
+                </div>
+                <!-- Third floor section info -->
+                <div class="second-floor" id="second-floor"><h3>Second Floor</h3>
+                    <section class="second-listings" id="second-listings">
+                        <p class="a_room" id="214">a</p>
+                        <p class="a_room" id="216">a</p>
+                        <p class="a_room" id="220">a</p>
+                        <p class="a_room" id="222">a</p>
+                        <p class="a_room" id="224">a</p>
+                        <p class="a_room" id="226">a</p>
+                        <p class="a_room" id="230">a</p>
+                    </section>
+                </div>
+                <!-- Third floor section info -->
+                <div class="third-floor" id="third-floor"><h3>Third Floor</h3>
+                    <section class="third-listings" id="third-listings">
+                        <p class="a_room" id="301">a</p>
+                        <p class="a_room" id="302">a</p>
+                        <p class="a_room" id="306">a</p>
+                        <p class="a_room" id="308">a</p>
+                        <p class="a_room" id="310">a</p>
+                        <p class="a_room" id="312">a</p>
+                        <p class="a_room" id="314">a</p>
+                    </section>
+                </div>
+                <!-- End floor sections for all floors to store rooms using js info -->
+            </div>
+        </main>
+        <!-- Footer section info -->
+        <footer id="footer">
+            <div class="footer-logo">
+                <img class="logo" src="https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Rhodes_College_seal.svg/1200px-Rhodes_College_seal.svg.png">
+            </div>
+            <div class="info">
+                <span class="address1">2000 North Parkway</span>
+                <span class="address2">Memphis, Tennessee 38112</span>
+                <span class="address3"><a href="tel:8008445969">800.844.5969</a></span>
+                <span class="address4"><a href="tel:9018433000">901.843.3000</a></span>
+            </div>
+        </footer>
+        <!-- End footer section info -->
+    </body>
+    <!-- Javascript file script -->
+    <script src="mainAdmin.js"></script>
+</html>
