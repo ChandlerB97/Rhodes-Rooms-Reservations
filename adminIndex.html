@@ -9,30 +9,47 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        
+        <!-- Begin Header info -->
         <header id="header">
             <img href="https://sites.rhodes.edu/barret" alt="rhodes-logo" src="https://www.rhodes.edu/sites/default/files/Rhodes%20Logo%202004%20CMYK_0.png" class="rhodes-logo">
             <a class="heading">Barret Library Study Rooms</a>
         </header>
-        
+        <!-- End Header info -->
         <main>
             <div class="main-container" id="main-container">
+                <!-- Buttons info -->
+                <div class="button-container">
+                    <button id="button" onclick="book_function()">Create Reservation</button>
+                    <br><br>
+                    <button id="button" onclick="cancel_function()">Cancel Reservation</button>
+                    <br><br>
+                    <button id="button" onclick="break_function()">Set Break Time</button>
+                </div>
+                <!-- End Buttons info -->
                 <h2>Study Rooms Available</h2>
+
+                <!-- Floor sections for all floors to store rooms using js info -->
+                
+                <!-- First floor section info -->
+
                 <button id="button" onclick="book_function()">Create Reservation</button>
                 <br><br>
                 <button id="button" onclick="break_function()">Set Break Time</button>
                 <br><br>
                 <button id="button" onclick="cancel_function()">Cancel Reservation</button>
+
                 <div class="basement-floor" id="basement-floor"><h3>Basement</h3>
                     <section class="basement-listings" id="basement-listings">
                         <p class="a_room" id="020">a</p>
                     </section>
                 </div>
+                <!-- First floor section info -->
                 <div class="first-floor" id="first-floor"><h3>First Floor</h3>
                     <section class="first-listings" id="first-listings">
                         <p class="a_room" id="120">a</p>
                     </section>
                 </div>
+                <!-- Third floor section info -->
                 <div class="second-floor" id="second-floor"><h3>Second Floor</h3>
                     <section class="second-listings" id="second-listings">
                         <p class="a_room" id="214">a</p>
@@ -44,6 +61,7 @@
                         <p class="a_room" id="230">a</p>
                     </section>
                 </div>
+                <!-- Third floor section info -->
                 <div class="third-floor" id="third-floor"><h3>Third Floor</h3>
                     <section class="third-listings" id="third-listings">
                         <p class="a_room" id="301">a</p>
@@ -55,8 +73,10 @@
                         <p class="a_room" id="314">a</p>
                     </section>
                 </div>
+                <!-- End floor sections for all floors to store rooms using js info -->
             </div>
         </main>
+        <!-- Footer section info -->
         <footer id="footer">
             <div class="footer-logo">
                 <img class="logo" src="https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Rhodes_College_seal.svg/1200px-Rhodes_College_seal.svg.png">
@@ -68,6 +88,8 @@
                 <span class="address4"><a href="tel:9018433000">901.843.3000</a></span>
             </div>
         </footer>
+        <!-- End footer section info -->
     </body>
+    <!-- Javascript file script -->
     <script src="mainAdmin.js"></script>
 </html>

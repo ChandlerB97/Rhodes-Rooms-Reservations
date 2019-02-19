@@ -1,6 +1,9 @@
 //Fill with classes for rooms
 //Rooms: 020, 120, 214, 216, 220, 222, 224, 226, 230, 301, 302, 306, 308, 310, 312, 314
 
+//Variable declarations
+var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn;
+
 //Room constructor function
 var Room = function(number, floor, capacity) {
   //Fields of Room class
@@ -10,26 +13,7 @@ var Room = function(number, floor, capacity) {
   this.open = "Open";             //room availability, set to true (open) for all rooms until booked
   this.duration_start = "-";      //duration until room becomes available
   this.breakTime = 0;             //duration until break time ends for student in booked room
-  this.duartion_end = "-";
-}
-
-//"Create" function to create a reservation, set open = "Closed", set duration <= 5 hours (cap on room time)
-function createRes(length, roomNum) {
-for(var i = 0; i < rooms.length; i++) {
-  if(rooms[i].number == roomNum) {
-    rooms[i].duration = length;
-    rooms[i].open = "Closed";
-  }
-}
-}
-//"Cancel" function to cancel a reservation, set open = "Open", reset duration = 0
-function cancelRes(roomNum) {
-for(var i = 0; i < rooms.length; i++) {
-  if(rooms[i].number == roomNum) {
-    rooms[i].duration = 0;
-    rooms[i].open = "Open";
-  }
-}
+  this.duration_end = "-";
 }
 
 
@@ -55,56 +39,72 @@ var room314 = new Room("314", "Third", 4);
 let rooms = [room020, room120, room214, room216, room220, room222, room224, room226, room230, 
           room301, room302, room306, room308, room310, room312, room314];
 
-
+//Function to render all rooms to screen with appropriate information
+//user for loop to print out each room class with all information
 function loadRooms() {
   for(var i = 0; i < rooms.length; i++) {
-    var info = document.getElementsByClassName('a_room');
+    info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
     info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open + " &emsp;Reservation Starts: " + rooms[i].duration_start 
-        + " &emsp;Reservation Ends: " + rooms[i].duartion_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
+        + " &emsp;Availability: " + rooms[i].open.bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
+        + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
         + "mins" + "&emsp;";
   }
 }
 
-loadRooms();
+//Call loadRooms() function to render content to page
+loadRooms();     
 
 
+//Book room function
+//Prompts user to specify room to book
+//Prompts user for start and end time of reservation
+//Loops through rooms to find room to book, updates room info accordingly
 function book_function() {
-  var rn = prompt("Which room would you like to book?");
-  var tdirs = prompt("Enter reservation start time:");
-  var tdire = prompt("Enter reservation end time:");
+  create_rn = prompt("Which room would you like to book?");
+  tdirs = prompt("Enter reservation start time:");
+  tdire = prompt("Enter reservation end time:");
   for (var i = 0; i < rooms.length; i++) {
-    if(rn == rooms[i].number){
+    if(create_rn == rooms[i].number){
       rooms[i].open = "Closed";
       rooms[i].duration_start = tdirs;
-      rooms[i].duartion_end = tdire;
+      rooms[i].duration_end = tdire;
+      break;
     }
-    loadRooms();
   }
+  loadRooms();  //Call loadRooms again to render updated info to page
 }
 
+//Break time function
+//Prompts user to specify room to add break time for
+//Prompts user for length of break time
+//Loops through rooms to find room, updates room info accordingly
 function break_function() {
-  var rn = prompt("Which room would you like to add break time for?");
-  var tbr = prompt("How long is the break time?");
+  break_rn = prompt("Which room would you like to add break time for?");
+  tbr = prompt("How long is the break time?");
   for (var i = 0; i < rooms.length; i++) {
-    if(rn == rooms[i].number){
+    if(break_rn == rooms[i].number){
       rooms[i].breakTime = tbr;
+      break;
     }
-    loadRooms();
   }
+  loadRooms();
 }
 
+//Cancel room reservation function
+//Prompts user to specify room to cancel
+//Loops through rooms to find room, updates room info accordingly
 function cancel_function() {
-  var rn = prompt("Which room would you like to cancel reservation?");
+  cancel_rn = prompt("Which room would you like to cancel reservation?");
   for (var i = 0; i < rooms.length; i++) {
-    if(rn == rooms[i].number){
+    if(cancel_rn == rooms[i].number){
       rooms[i].duration_start = "-";
       rooms[i].duration_end = "-";
       rooms[i].open = "Open";
       rooms[i].breakTime = 0;
+      break;
     }
-    loadRooms();
   }
+  loadRooms();
 }
 
 // //For loop to loop through array of all Room classes to create and append new 'p' elements to the page
