@@ -2,7 +2,7 @@
 //Rooms: 020, 120, 214, 216, 220, 222, 224, 226, 230, 301, 302, 306, 308, 310, 312, 314
 
 //Variable declarations
-var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn;
+var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn, para;
 
 //Room constructor function
 var Room = function(number, floor, capacity) {
@@ -44,14 +44,14 @@ let rooms = [room020, room120, room214, room216, room220, room222, room224, room
 function loadRooms() {
   for(var i = 0; i < rooms.length; i++) {
     if(rooms[i].open == "Open") {
-      info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
+      info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
       info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
         + " &emsp;Availability: " + rooms[i].open.fontcolor("green").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
         + "mins" + "&emsp;";
     }
     else{
-      info = document.getElementsByClassName('a_room');     //get each <a> in html file to be able to print
+      info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
       info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
         + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
@@ -69,18 +69,36 @@ loadRooms();
 //Prompts user for start and end time of reservation
 //Loops through rooms to find room to book, updates room info accordingly
 function book_function() {
-  create_rn = prompt("Which room would you like to book?");
-  tdirs = prompt("Enter reservation start time:");
-  tdire = prompt("Enter reservation end time:");
-  for (var i = 0; i < rooms.length; i++) {
-    if(create_rn == rooms[i].number){
-      rooms[i].open = "Closed";
-      rooms[i].duration_start = tdirs;
-      rooms[i].duration_end = tdire;
-      break;
+  //password protection function, credit to http://www.javascriptkit.com/script/cut10.shtml 
+  var testV = 1;
+  var pass1 = prompt('Please Enter Your Password',' ');
+  while (testV < 3) {       //while loop to only allow 3 login attempts
+    if (!pass1){
+      history.go(-1);
+    }
+    if (pass1.toLowerCase() == "letmein") {     //if password is entered correctly, run button functionality
+      create_rn = prompt("Which room would you like to book?");
+      tdirs = prompt("Enter reservation start time:");
+      tdire = prompt("Enter reservation end time:");
+      for (var i = 0; i < rooms.length; i++) {
+        if(create_rn == rooms[i].number){
+          rooms[i].open = "Closed";
+          rooms[i].duration_start = tdirs;
+          rooms[i].duration_end = tdire;
+          break;
+        }
+      }
+      loadRooms();  //Call loadRooms again to render updated info to page
+      break;        //break from password while loop
+    } 
+    else {          //if password is incorrect, prompt user for next attempt
+      testV+=1;
+      var pass1 = prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
     }
   }
-  loadRooms();  //Call loadRooms again to render updated info to page
+  if (pass1.toLowerCase()!="password" & testV ==3)    //if all attempts are incorrect, return to previous page
+    history.go(-1);
+    return " ";
 }
 
 //Break time function
@@ -88,33 +106,82 @@ function book_function() {
 //Prompts user for length of break time
 //Loops through rooms to find room, updates room info accordingly
 function break_function() {
-  break_rn = prompt("Which room would you like to add break time for?");
-  tbr = prompt("How long is the break time?");
-  for (var i = 0; i < rooms.length; i++) {
-    if(break_rn == rooms[i].number){
-      rooms[i].breakTime = tbr;
+  var testV = 1;
+  var pass1 = prompt('Please Enter Your Password',' ');
+  while (testV < 3) {
+    if (!pass1){
+      history.go(-1);
+    }
+    if (pass1.toLowerCase() == "letmein") {
+      break_rn = prompt("Which room would you like to add break time for?");
+      tbr = prompt("How long is the break time?");
+      for (var i = 0; i < rooms.length; i++) {
+        if(break_rn == rooms[i].number){
+          rooms[i].breakTime = tbr;
+          break;
+        }
+      }
+      loadRooms();
       break;
+    } 
+    else {
+      testV+=1;
+      var pass1 = prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
     }
   }
-  loadRooms();
+  //end while loop
+  if (pass1.toLowerCase()!="password" & testV ==3) 
+    history.go(-1);
+    return " ";
 }
 
 //Cancel room reservation function
 //Prompts user to specify room to cancel
 //Loops through rooms to find room, updates room info accordingly
 function cancel_function() {
-  cancel_rn = prompt("Which room would you like to cancel reservation?");
-  for (var i = 0; i < rooms.length; i++) {
-    if(cancel_rn == rooms[i].number){
-      rooms[i].duration_start = "-";
-      rooms[i].duration_end = "-";
-      rooms[i].open = "Open";
-      rooms[i].breakTime = 0;
+  var testV = 1;
+  var pass1 = prompt('Please Enter Your Password',' ');
+  while (testV < 3) {
+    if (!pass1){
+      history.go(-1);
+    }
+    if (pass1.toLowerCase() == "letmein") {
+      cancel_rn = prompt("Which room would you like to cancel reservation?");
+      for (var i = 0; i < rooms.length; i++) {
+        if(cancel_rn == rooms[i].number){
+          rooms[i].duration_start = "-";
+          rooms[i].duration_end = "-";
+          rooms[i].open = "Open";
+          rooms[i].breakTime = 0;
+          break;
+        }
+      }
+      loadRooms();
       break;
+    } 
+    else {
+      testV+=1;
+      var pass1 = prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
     }
   }
-  loadRooms();
+  if (pass1.toLowerCase()!="password" & testV ==3)
+    history.go(-1);
+    return " ";
 }
+
+
+// function update_listing() {
+//   for(var i = 0; i < rooms.length; i++) {
+//     if(rooms[i].open == "Closed") {
+//       para = document.createElement("P");
+//       para.innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
+//         + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
+//         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
+//         + "mins" + "&emsp;");
+//       document.getElementById("closed-rooms").appendChild(para);
+//     }
+//   }
+// }
 
 // //For loop to loop through array of all Room classes to create and append new 'p' elements to the page
 // for (var i = 0; i < rooms.length; i++) {
