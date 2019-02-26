@@ -13,7 +13,8 @@ var Room = function(number, floor, capacity) {
   this.open = "Open";             //room availability, set to true (open) for all rooms until booked
   this.duration_start = "-";      //duration until room becomes available
   this.breakTime = 0;             //duration until break time ends for student in booked room
-  this.duration_end = "-";
+  this.duration_end = "-";        //end time duration
+  this.mark = false;              //mark variable used to check if a closed room has already been printed to section (avoid repeats)
 }
 
 
@@ -39,10 +40,14 @@ var room314 = new Room("314", "Third", 4);
 let rooms = [room020, room120, room214, room216, room220, room222, room224, room226, room230, 
           room301, room302, room306, room308, room310, room312, room314];
 
+//array to store closed rooms, initialze to have nothing, will be used to store rooms that have been booked
+let closed_rooms = [];
+
 //Function to render all rooms to screen with appropriate information
 //user for loop to print out each room class with all information
 function loadRooms() {
   for(var i = 0; i < rooms.length; i++) {
+    //if state checking if rooms are open to print availability in green
     if(rooms[i].open == "Open") {
       info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
       info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
@@ -50,6 +55,7 @@ function loadRooms() {
         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
         + "mins" + "&emsp;";
     }
+    //prints availability in red if closed
     else{
       info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
       info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
@@ -61,8 +67,23 @@ function loadRooms() {
 }
 
 //Call loadRooms() function to render content to page
-loadRooms();     
+loadRooms();
 
+//Function to add closed rooms to "closed rooms" section at bottom
+function update_listing() {
+  for(var i = 0; i < closed_rooms.length; i++) {    //loop through closed_rooms array to find closed rooms to print
+    if(closed_rooms[i].mark == false) {
+      para = document.createElement("P");           //create new paragraph element
+      //update text content
+      para.innerHTML = "Room: " + closed_rooms[i].number + " &emsp;Floor: " + closed_rooms[i].floor + " &emsp;Capacity: " + 
+      closed_rooms[i].capacity + " &emsp;Availability: " + closed_rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " 
+      + closed_rooms[i].duration_start + " &emsp;Reservation Ends: " + closed_rooms[i].duration_end  + " &emsp;Break time remaining: " +
+      closed_rooms[i].breakTime + "mins" + "&emsp;";
+      document.getElementById("closed-rooms").appendChild(para);    //append paragraph text to closed-rooms section
+      closed_rooms[i].mark = true;        //mark closed room as true so it is not printed out multiple times when loop runs again
+    }
+  }
+}
 
 //Book room function
 //Prompts user to specify room to book
@@ -71,8 +92,9 @@ loadRooms();
 function book_function() {
   //password protection function, credit to http://www.javascriptkit.com/script/cut10.shtml 
   var testV = 1;
-  var pass1 = prompt('Please Enter Your Password',' ');
+  var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {       //while loop to only allow 3 login attempts
+    //if request is cancelled, return to previous page
     if (!pass1){
       history.go(-1);
     }
@@ -85,10 +107,12 @@ function book_function() {
           rooms[i].open = "Closed";
           rooms[i].duration_start = tdirs;
           rooms[i].duration_end = tdire;
+          closed_rooms.push(rooms[i]); 
           break;
         }
       }
       loadRooms();  //Call loadRooms again to render updated info to page
+      update_listing();
       break;        //break from password while loop
     } 
     else {          //if password is incorrect, prompt user for next attempt
@@ -96,7 +120,8 @@ function book_function() {
       var pass1 = prompt('Access Denied - Password Incorrect, Please Try Again.','Password');
     }
   }
-  if (pass1.toLowerCase()!="password" & testV ==3)    //if all attempts are incorrect, return to previous page
+  //if all attempts are incorrect, return to previous page
+  if (pass1.toLowerCase()!="password" & testV ==3)
     history.go(-1);
     return " ";
 }
@@ -107,7 +132,7 @@ function book_function() {
 //Loops through rooms to find room, updates room info accordingly
 function break_function() {
   var testV = 1;
-  var pass1 = prompt('Please Enter Your Password',' ');
+  var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {
     if (!pass1){
       history.go(-1);
@@ -140,7 +165,7 @@ function break_function() {
 //Loops through rooms to find room, updates room info accordingly
 function cancel_function() {
   var testV = 1;
-  var pass1 = prompt('Please Enter Your Password',' ');
+  var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {
     if (!pass1){
       history.go(-1);
@@ -157,6 +182,7 @@ function cancel_function() {
         }
       }
       loadRooms();
+      
       break;
     } 
     else {
@@ -170,18 +196,8 @@ function cancel_function() {
 }
 
 
-// function update_listing() {
-//   for(var i = 0; i < rooms.length; i++) {
-//     if(rooms[i].open == "Closed") {
-//       para = document.createElement("P");
-//       para.innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-//         + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
-//         + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
-//         + "mins" + "&emsp;");
-//       document.getElementById("closed-rooms").appendChild(para);
-//     }
-//   }
-// }
+//Old code saved for backup//
+
 
 // //For loop to loop through array of all Room classes to create and append new 'p' elements to the page
 // for (var i = 0; i < rooms.length; i++) {
