@@ -2,7 +2,7 @@
 //Rooms: 020, 120, 214, 216, 220, 222, 224, 226, 230, 301, 302, 306, 308, 310, 312, 314
 
 //Variable declarations
-var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn, para;
+var create_rn, tdirs, tdire, info, break_rn, tbr, cancel_rn, para, person;
 
 //Room constructor function
 var Room = function(number, floor, capacity) {
@@ -15,6 +15,7 @@ var Room = function(number, floor, capacity) {
   this.breakTime = 0;             //duration until break time ends for student in booked room
   this.duration_end = "-";        //end time duration
   this.mark = false;              //mark variable used to check if a closed room has already been printed to section (avoid repeats)
+  this.booker = "-";
 }
 
 
@@ -50,18 +51,19 @@ function loadRooms() {
     //if state checking if rooms are open to print availability in green
     if(rooms[i].open == "Open") {
       info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
-      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open.fontcolor("green").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
-        + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
-        + "mins" + "&emsp;";
+      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Capacity: " + rooms[i].capacity 
+        + " &emsp;Availability: " + rooms[i].open.fontcolor("green").bold() + " &emsp;Reservation Starts: " 
+        + rooms[i].duration_start + " &emsp;Reservation Ends: " + rooms[i].duration_end  + 
+        " &emsp;Break time remaining: " +rooms[i].breakTime + "mins" + "&emsp;" + " &emsp;Booker: " + rooms[i].booker;
     }
     //prints availability in red if closed
     else{
       info = document.getElementsByClassName('a_room');     //get each <p> in html file to be able to print
-      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Floor: " + rooms[i].floor + " &emsp;Capacity: " + rooms[i].capacity 
-        + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " + rooms[i].duration_start 
-        + " &emsp;Reservation Ends: " + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
-        + "mins" + "&emsp;";
+      info[i].innerHTML = "Room: " + rooms[i].number + " &emsp;Capacity: " + rooms[i].capacity 
+        + " &emsp;Availability: " + rooms[i].open.fontcolor("red").bold() + 
+        " &emsp;Reservation Starts: " + rooms[i].duration_start + " &emsp;Reservation Ends: " 
+        + rooms[i].duration_end  + " &emsp;Break time remaining: " +rooms[i].breakTime 
+        + "mins" + "&emsp;" + " &emsp;Booker: " + rooms[i].booker;
     }
   }
 }
@@ -75,10 +77,11 @@ function update_listing() {
     if(closed_rooms[i].mark == false) {
       para = document.createElement("P");           //create new paragraph element
       //update text content
-      para.innerHTML = "Room: " + closed_rooms[i].number + " &emsp;Floor: " + closed_rooms[i].floor + " &emsp;Capacity: " + 
-      closed_rooms[i].capacity + " &emsp;Availability: " + closed_rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " 
-      + closed_rooms[i].duration_start + " &emsp;Reservation Ends: " + closed_rooms[i].duration_end  + " &emsp;Break time remaining: " +
-      closed_rooms[i].breakTime + "mins" + "&emsp;";
+      para.innerHTML = "Room: " + closed_rooms[i].number + " &emsp;Capacity: " + closed_rooms[i].capacity 
+      + " &emsp;Availability: " + closed_rooms[i].open.fontcolor("red").bold() + " &emsp;Reservation Starts: " 
+      + closed_rooms[i].duration_start + " &emsp;Reservation Ends: " + closed_rooms[i].duration_end  
+      + " &emsp;Break time remaining: " + closed_rooms[i].breakTime + "mins" 
+      + "&emsp;" + " &emsp;Booker: " + rooms[i].booker;
       document.getElementById("closed-rooms").appendChild(para);    //append paragraph text to closed-rooms section
       closed_rooms[i].mark = true;        //mark closed room as true so it is not printed out multiple times when loop runs again
     }
@@ -94,19 +97,17 @@ function book_function() {
   var testV = 1;
   var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {       //while loop to only allow 3 login attempts
-    //if request is cancelled, return to previous page
-    if (!pass1){
-      history.go(-1);
-    }
     if (pass1.toLowerCase() == "letmein") {     //if password is entered correctly, run button functionality
       create_rn = prompt("Which room would you like to book?");
       tdirs = prompt("Enter reservation start time:");
       tdire = prompt("Enter reservation end time:");
+      person = prompt("Who is booking the room?");
       for (var i = 0; i < rooms.length; i++) {
         if(create_rn == rooms[i].number){
           rooms[i].open = "Closed";
           rooms[i].duration_start = tdirs;
           rooms[i].duration_end = tdire;
+          rooms[i].booker = person;
           closed_rooms.push(rooms[i]); 
           break;
         }
@@ -134,9 +135,6 @@ function break_function() {
   var testV = 1;
   var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {
-    if (!pass1){
-      history.go(-1);
-    }
     if (pass1.toLowerCase() == "letmein") {
       break_rn = prompt("Which room would you like to add break time for?");
       tbr = prompt("How long is the break time?");
@@ -167,9 +165,6 @@ function cancel_function() {
   var testV = 1;
   var pass1 = prompt('Please Enter Your Password','password');
   while (testV < 3) {
-    if (!pass1){
-      history.go(-1);
-    }
     if (pass1.toLowerCase() == "letmein") {
       cancel_rn = prompt("Which room would you like to cancel reservation?");
       for (var i = 0; i < rooms.length; i++) {
